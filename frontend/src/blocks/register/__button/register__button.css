@@ -1,0 +1,25 @@
+.register__button{
+  width: 358px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 2px;
+  margin: 0;
+  margin-top: 184px;
+  padding: 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #000000;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.3s ease-in-out;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+  
+.register__button:hover {
+  opacity: 0.85;
+}
