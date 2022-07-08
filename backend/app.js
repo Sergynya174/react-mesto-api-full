@@ -11,7 +11,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 dotenv.config();
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
-const { login, createUser } = require('./controllers/users');
+const { login, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
 const { Authorized } = require('./middlewares/auth');
 
@@ -48,7 +48,7 @@ app.post(
       avatar: Joi.string().custom(validateURL),
     }),
   }),
-  createUser,
+  createUsers,
 );
 
 app.use('/users', Authorized, userRouter);

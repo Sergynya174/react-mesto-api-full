@@ -62,8 +62,8 @@ const createUsers = (req, res, next) => {
           const resUser = {
             name: user.name,
             about: user.about,
-            avatar: user.avatar,
             email: user.email,
+            avatar: user.avatar,
             _id: user._id,
           };
           res.send({ data: resUser });
