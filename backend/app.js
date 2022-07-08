@@ -59,6 +59,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(putError);
 
-app.listen(PORT, () => {
-  console.log(`App started on ${PORT} port`);
-});
+app.listen(PORT, () => {});
