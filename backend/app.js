@@ -59,4 +59,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(putError);
 
-app.listen(PORT, () => {});
+app.listen(PORT);
