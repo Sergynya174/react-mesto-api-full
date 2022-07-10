@@ -8,11 +8,11 @@ const rateLimit = require('express-rate-limit');
 const { validateURL, putError } = require('./utils/error-codes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
-const { userRouter } = require('./routes/users');
-const { cardRouter } = require('./routes/cards');
+const userRouter = require('./routes/users');
+const cardRouter = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
-const { Authorized } = require('./middlewares/auth');
+const Authorized = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 
@@ -91,7 +91,7 @@ app.post('/logout', logout);
 
 app.use('/users', Authorized, userRouter);
 app.use('/cards', Authorized, cardRouter);
-app.use('*', () => {
+app.use('*', Authorized, () => {
   throw new NotFoundError('Cтраница не найдена');
 });
 

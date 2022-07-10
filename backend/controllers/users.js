@@ -35,7 +35,7 @@ const getUser = (req, res, next) => {
 };
 
 const getUserProfile = (req, res, next) => {
-  User.findById(req.user.id)
+  User.findById(req.user._id)
     .then((user) => res.send(user))
     .catch((err) => {
       next(err);
@@ -47,9 +47,6 @@ const createUsers = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!password || !email) {
-    throw new ValidationError('Поля email и пароль должны быть заполнены');
-  }
   bcrypt
     .hash(password, saltRounds)
     .then((hash) => {
@@ -138,23 +135,27 @@ const patchUserAvatar = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
 
-  if (!email || !password) {
-    throw new AuthError('Неправильные Email или пароль');
-  }
-  return User.findOne({ email, password })
+  return User.findOne({ email })
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'some',
-        { expiresIn: '7d' },
-      );
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      })
-        .send({ message: 'Авторизация прошла успешно!' });
+      if (!user) {
+        throw new NotFoundError('Запрашиваемый пользователь не найден');
+      } else {
+        const token = jwt.sign(
+          { _id: user._id },
+          NODE_ENV === 'production' ? JWT_SECRET : 'some',
+          { expiresIn: '7d' },
+        );
+        res.cookie('jwt', token, {
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true,
+        })
+          .send({ message: 'Авторизация прошла успешно!' });
+      }
+    })
+    .catch(() => {
+      throw new AuthError('Неправильный логин или пароль');
     })
     .catch((err) => {
       next(err);

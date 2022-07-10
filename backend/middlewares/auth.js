@@ -6,14 +6,11 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const Authorized = (req, res, next) => {
   const auth = req.headers.authorization;
 
-  if (!auth || !auth.startsWith('Bearer ')) {
-    throw new AuthError('Необходима авторизация');
-  }
   const token = auth.cookies.jwt;
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : '1da668578bd1c39ad42b0f225498c43081767e10d26f639a0f9247428e4cde12');
   } catch (err) {
     return next(new AuthError('jwt token не валиден'));
   }
