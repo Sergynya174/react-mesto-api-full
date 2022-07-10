@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 const AuthError = require('../utils/errors/authorized-err');
 
-const secretCode = '111';
-const genToken = (payload) => jwt.sign(payload, secretCode, { expiresIn: '7d' });
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const Authorized = (req, res, next) => {
   const auth = req.headers.authorization;
@@ -10,11 +9,11 @@ const Authorized = (req, res, next) => {
   if (!auth || !auth.startsWith('Bearer ')) {
     throw new AuthError('Необходима авторизация');
   }
-  const token = auth.replace('Bearer ', '');
+  const token = auth.cookies.jwt;
   let payload;
 
   try {
-    payload = jwt.verify(token, secretCode);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
   } catch (err) {
     return next(new AuthError('jwt token не валиден'));
   }
@@ -22,7 +21,4 @@ const Authorized = (req, res, next) => {
   return next();
 };
 
-module.exports = {
-  Authorized,
-  genToken,
-};
+module.exports = Authorized;

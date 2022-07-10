@@ -1,10 +1,12 @@
 const bcrypt = require('bcrypt');
-const { genToken } = require('../middlewares/auth');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NotFoundError = require('../utils/errors/not-found-err');
 const ValidationError = require('../utils/errors/validation-err');
 const AuthError = require('../utils/errors/authorized-err');
 const UserAlreadyExists = require('../utils/errors/user-already-exists');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const saltRounds = 10;
 
@@ -138,27 +140,29 @@ const patchUserAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
-    .select('+password')
+  if (!email || !password) {
+    throw new AuthError('Неправильные Email или пароль');
+  }
+  return User.findOne({ email, password })
     .then((user) => {
-      if (!user) {
-        throw new AuthError('Неправильные Email или пароль');
-      }
-
-      const passwordValid = bcrypt.compare(password, user.password);
-
-      return Promise.all([passwordValid, user]);
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'some',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      })
+        .send({ message: 'Авторизация прошла успешно!' });
     })
-    .then(([passwordValid, user]) => {
-      if (!passwordValid) {
-        throw new AuthError('Неправильные Email или пароль');
-      }
-      return genToken({ id: user._id });
-    })
-    .then((token) => res.send({ token }))
     .catch((err) => {
       next(err);
     });
+};
+
+const logout = (req, res) => {
+  res.clearCookie('jwt').send();
 };
 
 module.exports = {
@@ -169,4 +173,5 @@ module.exports = {
   patchUserProfile,
   patchUserAvatar,
   login,
+  logout,
 };
