@@ -29,6 +29,6 @@
 + MongodDB
 
 #### Как подключиться
-+ ссылка на фронтенд - [перейти](sergynya174.developer.nomoredomains.sbs)
++ ссылка на фронтенд - [перейти](https://sergynya174.developer.nomoredomains.sbs/)
 + запросы на бэкенд по адресу `api.sergynya174.developer.nomoredomains.xyz`
 + публичный IP адрес сервера `51.250.94.39`
