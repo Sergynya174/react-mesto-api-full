@@ -135,16 +135,16 @@ const patchUserAvatar = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
 
-  return User.findOne({ email })
+  return User.findOne({ email, password })
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       } else {
         const token = jwt.sign(
           { _id: user._id },
-          NODE_ENV === 'production' ? JWT_SECRET : 'some',
+          NODE_ENV === 'production' ? JWT_SECRET : '1da668578bd1c39ad42b0f225498c43081767e10d26f639a0f9247428e4cde12',
           { expiresIn: '7d' },
         );
         res.cookie('jwt', token, {
@@ -153,9 +153,13 @@ const login = (req, res, next) => {
         })
           .send({ message: 'Авторизация прошла успешно!' });
       }
-    })
-    .catch(() => {
-      throw new AuthError('Неправильный логин или пароль');
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new AuthError('Неправильный логин или пароль');
+          }
+          return user;
+        });
     })
     .catch((err) => {
       next(err);
