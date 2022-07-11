@@ -137,21 +137,11 @@ const patchUserAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findOne({ email, password })
+  return User.findOne({ email })
+    .select('+password')
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
-      } else {
-        const token = jwt.sign(
-          { _id: user._id },
-          NODE_ENV === 'production' ? JWT_SECRET : '1da668578bd1c39ad42b0f225498c43081767e10d26f639a0f9247428e4cde12',
-          { expiresIn: '7d' },
-        );
-        res.cookie('jwt', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-        })
-          .send({ message: 'Авторизация прошла успешно!' });
+        throw new AuthError('Неправильный логин или пароль');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
@@ -160,6 +150,18 @@ const login = (req, res, next) => {
           }
           return user;
         });
+    })
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : '1da668578bd1c39ad42b0f225498c43081767e10d26f639a0f9247428e4cde12',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      })
+        .send({ message: 'Авторизация прошла успешно!' });
     })
     .catch((err) => {
       next(err);
