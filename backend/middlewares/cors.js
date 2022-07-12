@@ -6,7 +6,7 @@ const allowedCors = [
   'https://localhost:3001',
   'http://localhost:3001',
   'http://api.sergynya174.developer.nomoredomains.xyz',
-  'https://api.sergynya174.developer.nomoredomains.xyz'
+  'https://api.sergynya174.developer.nomoredomains.xyz',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
