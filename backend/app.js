@@ -26,6 +26,8 @@ const allowedCors = [
   'https://localhost:3000',
   'http://localhost:3000',
 ];
+
+
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use((req, res, next) => {
