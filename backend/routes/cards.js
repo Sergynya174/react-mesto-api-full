@@ -8,9 +8,7 @@ const {
   likeCard,
   dislikeCard,
 } = require('../controllers/cards');
-const auth = require('../middlewares/auth');
 
-router.use(auth);
 router.get('/cards', getCards);
 router.post(
   '/cards',
