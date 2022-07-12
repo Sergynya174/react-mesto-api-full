@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
@@ -14,6 +14,7 @@ const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
 const Authorized = require('./middlewares/auth');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,21 +22,7 @@ const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', { useNewUrlParser: true, family: 4 });
 
-const allowedCors = [
-  'https://sergynya174.developer.nomoredomains.sbs',
-  'http://sergynya174.developer.nomoredomains.sbs',
-  'https://localhost:3000',
-  'http://localhost:3000',
-  'https://localhost:3001',
-  'http://localhost:3001',
-  'http://api.sergynya174.developer.nomoredomains.xyz',
-  'https://api.sergynya174.developer.nomoredomains.xyz',
-];
-
-app.use(cors({
-  origin: allowedCors,
-  credentials: true,
-}));
+app.use(cors());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
