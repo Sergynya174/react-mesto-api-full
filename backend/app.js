@@ -13,7 +13,7 @@ const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
 const Authorized = require('./middlewares/auth');
-const cors = require('./middlewares/cors');
+const cors = require('cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,7 +21,7 @@ const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-app.use(cors);
+app.use(cors({ credentials: true, origin: ['https://api.marina.nomoredomains.sbs', 'http://api.marina.nomoredomains.sbs', 'http://marina.nomoredomains.sbs', 'https://marina.nomoredomains.sbs', 'http://localhost:3001', 'http://localhost:3000', 'https://localhost:3001', 'https://localhost:3000', 'https://web.postman.co'] }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
