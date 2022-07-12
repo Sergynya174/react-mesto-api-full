@@ -14,21 +14,21 @@ function Header({ email, onSignOut }) {
       {location.pathname === "/" && (
         <div className="header__contener">
           <p className="header__user-email">{email}</p>
-          <Link className="header__button" to="/sign-in" onClick={onSignOut}>
+          <Link className="header__button" to="/signin" onClick={onSignOut}>
             Выйти
           </Link>
         </div>
       )}
-      {location.pathname === "/sign-up" && (
+      {location.pathname === "/signup" && (
         <div className="header__contener">
-          <Link className="header__button" to="/sign-in">
+          <Link className="header__button" to="/signin">
             Войти
           </Link>
         </div>
       )}
-      {location.pathname === "/sign-in" && (
+      {location.pathname === "/signin" && (
         <div className="header__contener">
-          <Link className="header__button" to="/sign-up">
+          <Link className="header__button" to="/signup">
             Регистрация
           </Link>
         </div>

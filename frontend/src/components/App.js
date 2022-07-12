@@ -207,7 +207,7 @@ function App() {
       .then((data) => {
         if (data) {
           handleInfoTooltip(true);
-          navigate("/sign-in");
+          navigate("/signin");
         }
       })
       .catch((err) => {
@@ -221,7 +221,7 @@ function App() {
     localStorage.removeItem("jwt");
     setProfileEmail("");
     setLoggedIn(false);
-    navigate("/sign-in");
+    navigate("/signin");
   };
 
   return (
@@ -252,10 +252,10 @@ function App() {
           />
 
           <Route
-            path="/sign-up"
+            path="/signup"
             element={<Register onRegister={handleRegister} />}
           />
-          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
 
