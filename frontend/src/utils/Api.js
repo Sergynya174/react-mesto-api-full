@@ -72,7 +72,7 @@ class Api {
 }
 
 export const api = new Api ({
-    url: 'api.sergynya174.developer.nomoredomains.xyz',
+    url: 'https://api.sergynya174.developer.nomoredomains.xyz',
     headers: {
     authorization: 'f2d279ee-e2e6-4713-9f2e-835540e17693',
     'Content-Type': 'application/json; charset=utf-8'
