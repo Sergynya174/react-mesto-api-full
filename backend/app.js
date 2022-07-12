@@ -13,41 +13,15 @@ const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
 const Authorized = require('./middlewares/auth');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-const allowedCors = [
-  'https://api.sergynya174.developer.nomoredomains.xyz',
-  'http://api.sergynya174.developer.nomoredomains.xyz',
-  'https://sergynya174.developer.nomoredomains.sbs',
-  'http://sergynya174.developer.nomoredomains.sbs',
-  'https://localhost:3000',
-  'http://localhost:3000',
-];
-
-
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  const { method } = req;
-  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  const requestHeaders = req.headers['access-control-request-headers'];
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-  }
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-
-    return res.status(200).send();
-  }
-
-  return next();
-});
+app.use(cors);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
