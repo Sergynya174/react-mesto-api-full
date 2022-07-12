@@ -68,8 +68,8 @@ app.post(
 );
 app.post('/logout', logout);
 
-app.use('/users', Authorized, userRouter);
-app.use('/cards', Authorized, cardRouter);
+app.use('/', Authorized, userRouter);
+app.use('/', Authorized, cardRouter);
 app.use('*', Authorized, () => {
   throw new NotFoundError('Cтраница не найдена');
 });
