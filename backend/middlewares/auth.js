@@ -10,10 +10,10 @@ const Authorized = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : '1da668578bd1c39ad42b0f225498c43081767e10d26f639a0f9247428e4cde12');
   } catch (err) {
-    return next(new AuthError('jwt token не валиден'));
+    next(new AuthError('jwt token не валиден'));
   }
   req.user = payload;
-  return next();
+  next();
 };
 
 module.exports = Authorized;

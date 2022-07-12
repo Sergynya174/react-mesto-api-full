@@ -8,14 +8,12 @@ const {
   patchUserProfile,
   patchUserAvatar,
 } = require('../controllers/users');
-const auth = require('../middlewares/auth');
 
-router.use(auth);
-router.get('/', getUsers);
-router.get('/me', getUserProfile);
+router.get('/users', getUsers);
+router.get('/users/me', getUserProfile);
 
 router.patch(
-  '/me',
+  'users/me',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -26,7 +24,7 @@ router.patch(
 );
 
 router.patch(
-  '/me/avatar',
+  'users/me/avatar',
   celebrate({
     body: Joi.object().keys({
       avatar: Joi.string().custom(validateURL),
@@ -35,7 +33,7 @@ router.patch(
   patchUserAvatar,
 );
 
-router.get('/:id', celebrate({
+router.get('/users/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().alphanum().length(24),
   }),
