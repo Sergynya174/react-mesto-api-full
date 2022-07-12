@@ -1,4 +1,4 @@
-export const baseUrl = "api.sergynya174.developer.nomoredomains.xyz";
+export const baseUrl = "sergynya174.developer.nomoredomains.sbs";
 
 export const register = (email, password) => {
   return fetch(`${baseUrl}/signup`, {
