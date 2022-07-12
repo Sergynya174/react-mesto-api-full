@@ -53,7 +53,7 @@ const limiter = rateLimit({
   message: 'Слишком много запросов, пожалуйста, повторите попытку позже.',
 });
 
-app.use(cors());
+app.use(allowedCors);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
