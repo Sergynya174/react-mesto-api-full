@@ -13,7 +13,7 @@ router.get('/users', getUsers);
 router.get('/users/me', getUserProfile);
 
 router.patch(
-  'users/me',
+  '/users/me',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -24,7 +24,7 @@ router.patch(
 );
 
 router.patch(
-  'users/me/avatar',
+  '/users/me/avatar',
   celebrate({
     body: Joi.object().keys({
       avatar: Joi.string().custom(validateURL),
