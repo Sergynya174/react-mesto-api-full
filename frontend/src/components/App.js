@@ -207,6 +207,7 @@ function App() {
       .then((data) => {
         if (data) {
           handleInfoTooltip(true);
+          navigate("/sign-in");
         }
       })
       .catch((err) => {
@@ -220,6 +221,7 @@ function App() {
     localStorage.removeItem("jwt");
     setProfileEmail("");
     setLoggedIn(false);
+    navigate("/sign-in");
   };
 
   return (
