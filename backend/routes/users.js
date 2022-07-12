@@ -8,7 +8,9 @@ const {
   patchUserProfile,
   patchUserAvatar,
 } = require('../controllers/users');
+const auth = require('../middlewares/auth');
 
+router.use(auth);
 router.get('/', getUsers);
 router.get('/me', getUserProfile);
 

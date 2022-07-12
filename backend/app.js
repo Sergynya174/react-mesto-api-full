@@ -19,9 +19,12 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 const allowedCors = [
-  'sergynya174.developer.nomoredomains.sbs',
-  'api.sergynya174.developer.nomoredomains.xyz',
-  'localhost:3000',
+  'https://api.sergynya174.developer.nomoredomains.xyz',
+  'http://api.sergynya174.developer.nomoredomains.xyz',
+  'https://sergynya174.developer.nomoredomains.sbs',
+  'http://sergynya174.developer.nomoredomains.sbs',
+  'https://localhost:3000',
+  'http://localhost:3000',
 ];
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -50,6 +53,7 @@ const limiter = rateLimit({
   message: 'Слишком много запросов, пожалуйста, повторите попытку позже.',
 });
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
