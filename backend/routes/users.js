@@ -33,7 +33,7 @@ router.patch(
   patchUserAvatar,
 );
 
-router.get('/users/:id', celebrate({
+router.get('/users/:userId', celebrate({
   params: Joi.object().keys({
     id: Joi.string().alphanum().length(24),
   }),
