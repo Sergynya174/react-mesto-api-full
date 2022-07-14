@@ -16,7 +16,7 @@ const createCard = (req, res, next) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные'));
@@ -52,11 +52,9 @@ const likeCard = (req, res, next) => {
       if (!cardData) {
         throw new NotFoundError('Карточка не найдена');
       }
-      res.send({ data: cardData });
+      res.status(201).send(cardData);
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const dislikeCard = (req, res, next) => {
@@ -65,11 +63,9 @@ const dislikeCard = (req, res, next) => {
       if (!cardData) {
         throw new NotFoundError('Карточка не найдена');
       }
-      res.send({ data: cardData });
+      res.send(cardData);
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports = {

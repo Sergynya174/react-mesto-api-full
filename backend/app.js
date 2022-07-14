@@ -66,7 +66,6 @@ app.post(
   }),
   createUsers,
 );
-app.post('/logout', logout);
 
 app.use('/', Authorized, userRouter);
 app.use('/', Authorized, cardRouter);
@@ -77,6 +76,7 @@ app.use('*', Authorized, () => {
 app.use(errorLogger);
 app.use(errors());
 app.use(putError);
+app.post('/logout', logout);
 
 app.listen(PORT, () => {
   console.log(`App started on ${PORT} port`);

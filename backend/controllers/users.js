@@ -12,34 +12,27 @@ const saltRounds = 10;
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch((err) => {
-      next(err);
-    });
+    .then((users) => res.status(200).send({ data: users }))
+    .catch(next);
 };
 
 const getUser = (req, res, next) => {
-  const { userId } = req.params;
-  User.findById(userId)
+  User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
         throw new NotFoundError({
           message: 'Запрашиваемый пользователь не найден',
         });
       }
-      res.send({ data: user });
+      res.send({ user });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const getUserProfile = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => res.send(user))
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const createUsers = (req, res, next) => {
@@ -47,43 +40,42 @@ const createUsers = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  bcrypt
-    .hash(password, saltRounds)
-    .then((hash) => {
-      User.create({
-        name,
-        about,
-        avatar,
-        email,
-        password: hash,
-      })
-        .then((user) => {
-          const resUser = {
-            name: user.name,
-            about: user.about,
-            email: user.email,
-            avatar: user.avatar,
-            _id: user._id,
-          };
-          res.send({ data: resUser });
-        })
-        .catch((err) => {
-          if (err.name === 'ValidationError') {
-            next(
-              new ValidationError('Некорректные данные при создании пользователя'),
-            );
-          }
-          if (err.code === 11000) {
-            return next(
-              new UserAlreadyExists('Такой пользователь уже существует'),
-            );
-          }
-          return next(err);
-        });
+  if (!password || !email) {
+    throw new ValidationError('Почта или пароль должны быть заполнены');
+  }
+
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new UserAlreadyExists('Такой пользователь уже существует');
+      } else {
+        bcrypt.hash(password, saltRounds)
+          .then((hash) => User.create({
+            name,
+            about,
+            avatar,
+            email,
+            password: hash,
+          }))
+          .then((userData) => res.send({
+            name: userData.name,
+            about: userData.about,
+            avatar: userData.avatar,
+            id: userData._id,
+            email: userData.email,
+          }))
+          .catch((err) => {
+            if (err.name === 'ValidationError') {
+              next(new ValidationError('Некорректные данные при создании пользователя'));
+            }
+            if (err.code === 11000) {
+              next(new UserAlreadyExists('Такой пользователь уже существует'));
+            }
+            next(err);
+          });
+      }
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const patchUserProfile = (req, res, next) => {
@@ -99,7 +91,7 @@ const patchUserProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -121,7 +113,7 @@ const patchUserAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -157,15 +149,9 @@ const login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : '10d5865c85b895c6386a5501acfee2775244c5b6f4d2c16036b1c5858d392b34',
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      })
-        .send({ message: 'Авторизация прошла успешно!' });
+      res.send({ token });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const logout = (req, res) => {
