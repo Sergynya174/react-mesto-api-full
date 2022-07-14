@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cors = require('./middlewares/cors');
 const { validateURL, putError } = require('./utils/error-codes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
@@ -14,7 +14,6 @@ const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
 const Authorized = require('./middlewares/auth');
-const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -22,7 +21,7 @@ const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', { useNewUrlParser: true, family: 4 });
 
-app.use(cors());
+app.use(cors);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
