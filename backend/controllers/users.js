@@ -19,14 +19,15 @@ const getUsers = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-  User.findById(req.params.userId)
+  const { userId } = req.params;
+  User.findById(userId)
     .then((user) => {
       if (!user) {
         throw new NotFoundError({
           message: 'Запрашиваемый пользователь не найден',
         });
       }
-      res.send(user);
+      res.send({ data: user });
     })
     .catch((err) => {
       next(err);
@@ -35,12 +36,7 @@ const getUser = (req, res, next) => {
 
 const getUserProfile = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Такого пользователя нет');
-      }
-      return res.send(user);
-    })
+    .then((user) => res.send(user))
     .catch((err) => {
       next(err);
     });
@@ -61,13 +57,16 @@ const createUsers = (req, res, next) => {
         email,
         password: hash,
       })
-        .then((userData) => res.send({
-          name: userData.name,
-          about: userData.about,
-          email: userData.email,
-          avatar: userData.avatar,
-          _id: userData._id,
-        }))
+        .then((user) => {
+          const resUser = {
+            name: user.name,
+            about: user.about,
+            email: user.email,
+            avatar: user.avatar,
+            _id: user._id,
+          };
+          res.send({ data: resUser });
+        })
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(
@@ -89,9 +88,10 @@ const createUsers = (req, res, next) => {
 
 const patchUserProfile = (req, res, next) => {
   const { name, about } = req.body;
+  const userId = req.user._id;
 
   User.findByIdAndUpdate(
-    req.user._id,
+    userId,
     { name, about },
     { new: true, runValidators: true },
   )
@@ -99,7 +99,7 @@ const patchUserProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      res.send(user);
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -121,7 +121,7 @@ const patchUserAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      res.send(user);
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

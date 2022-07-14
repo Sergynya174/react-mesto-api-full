@@ -13,7 +13,7 @@ const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
 const NotFoundError = require('./utils/errors/not-found-err');
-const Authorized = require('./middlewares/auth');
+//const Authorized = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 
@@ -68,9 +68,9 @@ app.post(
 );
 app.post('/logout', logout);
 
-app.use('/', Authorized, userRouter);
-app.use('/', Authorized, cardRouter);
-app.use('*', Authorized, () => {
+app.use('/', userRouter);
+app.use('/', cardRouter);
+app.use('*', () => {
   throw new NotFoundError('Cтраница не найдена');
 });
 
