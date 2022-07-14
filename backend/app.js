@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const cors = require('./middlewares/cors');
+const cors = require('cors');
 const { validateURL, putError } = require('./utils/error-codes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
