@@ -134,7 +134,7 @@ function App() {
       .deleteCard(card._id)
       .then(() => {
         setCards((cards) =>
-          cards.filter((newCard) => newCard !== card._id)
+          cards.filter((newCard) => newCard._id !== card._id)
         );
         //* Обновляем стейт
         closeAllPopups();
