@@ -171,7 +171,7 @@ function App() {
         .checkToken(jwt)
         .then((data) => {
           if (data) {
-            setProfileEmail(data.data.email);
+            setProfileEmail(data.email);
             setLoggedIn(true);
             navigate("/");
           }
