@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,7 +9,6 @@ const rateLimit = require('express-rate-limit');
 const cors = require('./middlewares/cors');
 const { validateURL, putError } = require('./utils/error-codes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-require('dotenv').config();
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 const { login, logout, createUsers } = require('./controllers/users');
