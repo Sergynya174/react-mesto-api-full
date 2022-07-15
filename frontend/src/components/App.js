@@ -169,11 +169,10 @@ function App() {
     if (jwt) {
       auth
         .checkToken(jwt)
-        .then((data) => {
-          if (data) {
-            console.log(data);
-            setProfileEmail(data.email);
-            setCurrentUser(data);
+        .then((res) => {
+          if (res) {
+            setProfileEmail(res.email);
+            setCurrentUser(res);
             setLoggedIn(true);
             navigate("/");
           }
