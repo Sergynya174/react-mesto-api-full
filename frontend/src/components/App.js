@@ -115,7 +115,7 @@ function App() {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     //* Отправляем запрос в API и получаем обновлённые данные карточки
     api
-      .changeCardLike(card._id, isLiked)
+      .changeCardLike(card.data._id, isLiked)
       .then((newCard) => {
         //* Формируем новый массив на основе имеющегося, подставляя в него новую карточку
         setCards((cards) =>
@@ -131,7 +131,7 @@ function App() {
   function handleCardDelete(card) {
     setIsDataLoad(true);
     api
-      .deleteCard(card._id)
+      .deleteCard(card.data._id)
       .then(() => {
         setCards((cards) =>
           cards.filter((newCard) => newCard._id !== card._id)
