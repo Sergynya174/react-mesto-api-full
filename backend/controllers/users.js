@@ -31,7 +31,12 @@ const getUser = (req, res, next) => {
 
 const getUserProfile = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Такого пользователя нет');
+      }
+      res.send(user);
+    })
     .catch(next);
 };
 

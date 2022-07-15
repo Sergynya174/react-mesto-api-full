@@ -30,7 +30,7 @@ class Api {
         }).then(this._getResponseData);
     }
     
-    editProfile(userData) {
+    editProfile({name, about}) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {
@@ -38,13 +38,13 @@ class Api {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
-                name: userData.name,
-                about: userData.about
+                name: name,
+                about: about
             })
         }).then(this._getResponseData);
     }
 
-    addCard(data) {
+    addCard({name, link}) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
             headers: {
@@ -52,8 +52,8 @@ class Api {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
               },
             body: JSON.stringify({
-                name: data.name,
-                link: data.link
+                name: name,
+                link: link
             })
         }).then(this._getResponseData);
     }
