@@ -119,7 +119,7 @@ function App() {
       .then((newCard) => {
         //* Формируем новый массив на основе имеющегося, подставляя в него новую карточку
         setCards((cards) =>
-          cards.map((c) => (c._id === card ? newCard : c))
+          cards.map((c) => (c._id === card._id ? newCard : c))
         );
         //* Обновляем стейт
       })
@@ -134,7 +134,7 @@ function App() {
       .deleteCard(card._id)
       .then(() => {
         setCards((cards) =>
-          cards.filter((newCard) => newCard._id !== card._id)
+          cards.filter((newCard) => newCard !== card._id)
         );
         //* Обновляем стейт
         closeAllPopups();
