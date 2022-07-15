@@ -119,7 +119,7 @@ function App() {
       .then((newCard) => {
         //* Формируем новый массив на основе имеющегося, подставляя в него новую карточку
         setCards((cards) =>
-          cards.map((c) => (c._id === card._id ? newCard : c))
+          cards.map((c) => (c._id === card ? newCard : c))
         );
         //* Обновляем стейт
       })
