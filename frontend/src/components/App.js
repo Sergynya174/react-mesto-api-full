@@ -112,10 +112,10 @@ function App() {
 
   function handleCardLike(card) {
     //* Снова проверяем, есть ли уже лайк на данной карточке
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i._id === currentUser.data._id);
     //* Отправляем запрос в API и получаем обновлённые данные карточки
     api
-      .changeCardLike(card.data._id, isLiked)
+      .changeCardLike(card._id, isLiked)
       .then((newCard) => {
         //* Формируем новый массив на основе имеющегося, подставляя в него новую карточку
         setCards((cards) =>
@@ -131,7 +131,7 @@ function App() {
   function handleCardDelete(card) {
     setIsDataLoad(true);
     api
-      .deleteCard(card.data._id)
+      .deleteCard(card._id)
       .then(() => {
         setCards((cards) =>
           cards.filter((newCard) => newCard._id !== card._id)
