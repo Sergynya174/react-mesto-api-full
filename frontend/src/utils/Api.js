@@ -15,7 +15,7 @@ class Api {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
         }).then(this._getResponseData);
     }
@@ -25,7 +25,7 @@ class Api {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
         }).then(this._getResponseData);
     }
@@ -35,7 +35,7 @@ class Api {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
             },
             body: JSON.stringify({
                 name: name,
@@ -49,7 +49,7 @@ class Api {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
             body: JSON.stringify({
                 name: name,
@@ -63,7 +63,7 @@ class Api {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
         }).then(this._getResponseData);
     }
@@ -73,7 +73,7 @@ class Api {
             method: !isLiked ? 'PUT' : 'DELETE',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
         }).then(this._getResponseData);
     }
@@ -83,7 +83,7 @@ class Api {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
               },
             body: JSON.stringify({
                 avatar: data.url
